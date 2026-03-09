@@ -15,4 +15,6 @@ COPY src ./src
 
 EXPOSE 5000 50051 9090
 
+RUN uv run python -c "from src.model import ToxicityModel; ToxicityModel().load()"
+
 CMD ["sh", "-c", "uv run python -m uvicorn src.main:app --host 0.0.0.0 --port 5000 & uv run python -m src.grpc_api & wait"]
