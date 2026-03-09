@@ -1,8 +1,6 @@
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
 
-TOXIC_KEYWORDS = ("idiot", "stupid", "trash", "moron", "hate")
-
 
 class ToxicityModel:
     def __init__(self) -> None:
