@@ -9,7 +9,7 @@ RUN uv sync --frozen --no-dev
 
 COPY run_codegen.py ./
 COPY proto ./proto
-RUN python3 run_codegen.py
+RUN uv run python run_codegen.py
 
 COPY src ./src
 
