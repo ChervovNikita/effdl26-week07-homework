@@ -1,15 +1,13 @@
-import threading
 from typing import Optional
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from pydantic import BaseModel
 
 from src.config import Settings
-from src.model import ToxicityModel
 
 import grpc
-import inference_pb2_grpc
-import inference_pb2
+import inference_pb2_grpc  # noqa: F401, type: ignore
+import inference_pb2  # noqa: F401, type: ignore
 
 
 class PredictRequest(BaseModel):
@@ -32,11 +30,16 @@ def create_app(settings: Optional[Settings] = None) -> FastAPI:
 
     @app.post("/predict", response_model=PredictResponse)
     def predict(payload: PredictRequest) -> PredictResponse:
-        with grpc.insecure_channel(f'[::]:{app.state.settings.grpc_inference_port}') as channel:
+        with grpc.insecure_channel(
+            f"[::]:{app.state.settings.grpc_inference_port}"
+        ) as channel:
             stub = inference_pb2_grpc.TextClassifierStub(channel)
-            response = stub.Predict(inference_pb2.TextClassificationInput(text=payload.text))
+            response = stub.Predict(
+                inference_pb2.TextClassificationInput(text=payload.text)
+            )
             return PredictResponse(is_toxic=response.is_toxic)
 
     return app
+
 
 app = create_app()

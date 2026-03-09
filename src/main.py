@@ -1,4 +1,5 @@
 import threading
+
 from typing import Optional
 
 from fastapi import FastAPI, HTTPException
@@ -47,5 +48,6 @@ def create_app(settings: Optional[Settings] = None) -> FastAPI:
         return PredictResponse(is_toxic=is_toxic)
 
     return app
+
 
 app = create_app()

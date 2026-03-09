@@ -10,6 +10,6 @@ RUN uv sync --frozen --no-dev
 COPY src ./src
 
 RUN python3 run_codegen.py
-EXPOSE 9090 
+EXPOSE 9090
 
 CMD ["uv", "run", "python", "-m", "uvicorn", "src.grpc_client:app", "--host", "0.0.0.0", "--port", "9090"]
