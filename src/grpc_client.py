@@ -6,8 +6,8 @@ from pydantic import BaseModel
 from src.config import Settings
 
 import grpc
-import inference_pb2_grpc  # noqa: F401, type: ignore
-import inference_pb2  # noqa: F401, type: ignore
+import inference_pb2_grpc
+import inference_pb2
 
 
 class PredictRequest(BaseModel):

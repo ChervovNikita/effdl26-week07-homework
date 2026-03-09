@@ -3,8 +3,8 @@ import logging
 from concurrent import futures
 
 import grpc
-import inference_pb2  # noqa: F401, type: ignore
-import inference_pb2_grpc  # noqa: F401, type: ignore
+import inference_pb2
+import inference_pb2_grpc
 
 from src.model import ToxicityModel
 from src.config import Settings
