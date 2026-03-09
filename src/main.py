@@ -4,9 +4,16 @@ from typing import Optional
 
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
+from prometheus_client import Counter, make_asgi_app
 
 from src.config import Settings
 from src.model import ToxicityModel
+
+
+inference_count = Counter(
+    "app_http_inference_count",
+    "Number of requests",
+)
 
 
 class PredictRequest(BaseModel):
@@ -41,6 +48,7 @@ def create_app(settings: Optional[Settings] = None) -> FastAPI:
     def _predict(text: str) -> PredictResponse:
         if not app.state.ready:
             raise HTTPException(status_code=503, detail="Model is still loading.")
+        inference_count.inc()
         is_toxic = app.state.model.predict(text)
         return PredictResponse(is_toxic=is_toxic)
 
@@ -51,6 +59,9 @@ def create_app(settings: Optional[Settings] = None) -> FastAPI:
     @app.get("/predict", response_model=PredictResponse)
     def predict_get(text: str = Query(...)) -> PredictResponse:
         return _predict(text)
+
+    metrics_app = make_asgi_app()
+    app.mount("/metrics", metrics_app)
 
     return app
 
