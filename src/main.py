@@ -2,7 +2,7 @@ import threading
 
 from typing import Optional
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
 
 from src.config import Settings
@@ -38,14 +38,19 @@ def create_app(settings: Optional[Settings] = None) -> FastAPI:
     def health() -> dict:
         return {"status": "ready" if app.state.ready else "not ready"}
 
-    @app.post("/predict", response_model=PredictResponse)
-    def predict(payload: PredictRequest) -> PredictResponse:
+    def _predict(text: str) -> PredictResponse:
         if not app.state.ready:
             raise HTTPException(status_code=503, detail="Model is still loading.")
-
-        is_toxic = app.state.model.predict(payload.text)
-
+        is_toxic = app.state.model.predict(text)
         return PredictResponse(is_toxic=is_toxic)
+
+    @app.post("/predict", response_model=PredictResponse)
+    def predict_post(payload: PredictRequest) -> PredictResponse:
+        return _predict(payload.text)
+
+    @app.get("/predict", response_model=PredictResponse)
+    def predict_get(text: str = Query(...)) -> PredictResponse:
+        return _predict(text)
 
     return app
 
