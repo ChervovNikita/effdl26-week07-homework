@@ -4,7 +4,8 @@ from typing import Optional
 
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
-from prometheus_client import Counter, make_asgi_app
+from prometheus_client import Counter, generate_latest
+from fastapi.responses import PlainTextResponse
 
 from src.config import Settings
 from src.model import ToxicityModel
@@ -60,8 +61,9 @@ def create_app(settings: Optional[Settings] = None) -> FastAPI:
     def predict_get(text: str = Query(...)) -> PredictResponse:
         return _predict(text)
 
-    metrics_app = make_asgi_app()
-    app.mount("/metrics", metrics_app)
+    @app.get("/metrics")
+    def metrics():
+        return PlainTextResponse(content=generate_latest())
 
     return app
 
