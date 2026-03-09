@@ -2,6 +2,8 @@ FROM python:3.13-slim-bookworm
 
 WORKDIR /app
 
+ENV PATH="/app/.venv/bin:$PATH"
+
 COPY --from=ghcr.io/astral-sh/uv:0.10.4 /uv /uvx /bin/
 
 COPY pyproject.toml uv.lock ./
