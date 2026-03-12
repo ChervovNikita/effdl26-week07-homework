@@ -7,8 +7,8 @@ Your task here is to implement the toxic text classification service. You can us
 Your code must be `uv`-installable and the source code must be inside the `src/<package_name>` directory. The package name is up to you.
 
 **[4 points] HTTP endpoint:**
-Implement a service which can handle the `POST /predict` query on port `5000`.
-Input data is represented in a query `text=some_text`.
+Implement a service which can handle the `GET /predict` query on port `5000`.
+Input data is represented in a query `?text=some_text`.
 
 Response data is also a JSON with the following structure:
 ```json
@@ -19,7 +19,7 @@ Response data is also a JSON with the following structure:
 
 Example:
 ```bash
-curl -XPOST http://localhost:5000/predict?text=thank+you+very+much'
+curl -XGET http://localhost:5000/predict?text=thank+you+very+much'
 ...
 {
   "is_toxic": false

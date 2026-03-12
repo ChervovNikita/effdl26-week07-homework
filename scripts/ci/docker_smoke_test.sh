@@ -35,5 +35,6 @@ clean = json.loads(os.environ["CLEAN_JSON"])
 
 assert toxic["is_toxic"] is True, f"Expected toxic=True, got: {toxic}"
 assert clean["is_toxic"] is False, f"Expected toxic=False, got: {clean}"
+print("Classification smoke checks passed")
 
 PY
