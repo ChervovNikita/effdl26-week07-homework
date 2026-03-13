@@ -31,7 +31,7 @@ if [ "${ready}" -ne 1 ]; then
   exit 1
 fi
 
-docker exec "${CONTAINER_NAME}" python - <<'PY'
+docker exec -i "${CONTAINER_NAME}" python - <<'PY'
 import grpc
 import inference_pb2, inference_pb2_grpc
 

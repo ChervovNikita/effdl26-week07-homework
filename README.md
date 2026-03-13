@@ -7,13 +7,8 @@ Your task here is to implement the toxic text classification service. You can us
 Your code must be `uv`-installable and the source code must be inside the `src/<package_name>` directory. The package name is up to you.
 
 **[4 points] HTTP endpoint:**
-Implement a service which can handle the `POST /predict` query on port `5000`.
-Request data is a JSON with the following structure:
-```json
-{
-  "text": "<text_to_classify>"
-}
-```
+Implement a service which can handle the `GET /predict` query on port `5000`.
+Input data is represented in a query `?text=some_text`.
 
 Response data is also a JSON with the following structure:
 ```json
@@ -24,7 +19,7 @@ Response data is also a JSON with the following structure:
 
 Example:
 ```bash
-curl -XPOST http://localhost:5000/predict -H "Content-Type: application/json" -d '{"text": "Thank you very much, have a good day <3"}'
+curl -XGET http://localhost:5000/predict?text=thank+you+very+much'
 ...
 {
   "is_toxic": false
@@ -33,7 +28,7 @@ curl -XPOST http://localhost:5000/predict -H "Content-Type: application/json" -d
 
 
 **[4 points] GRPC endpoint:**
-Implement a separate [gRPC](https://grpc.io/) service on the `9090` port.
+Implement a separate [gRPC](https://grpc.io/) service on the `50051` port.
 See the `inference.proto` file in the `proto` directory.
 The contract is the same as for the HTTP endpoint. Do not modify the protobuf structure.
 
